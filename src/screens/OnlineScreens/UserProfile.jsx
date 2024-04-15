@@ -38,9 +38,9 @@ const UserProfile = () => {
       {profil.userId.id === JSON.parse(localStorage.getItem('userInfos')).userId && (
         <Link to={`/editprofil/${profil.userId.id}`}>Modifier mon profil</Link>
       )}
-     {/* projet == true et projet.creator == user */}
+     {/* projet == true et projet.post.creator == user */}
      <h2>Projets crées</h2>
-     {/* projet == true et projet.creator != user */}
+     {/* projet == true et projet.post.creator != user */}
      <h2>Projets participés</h2>
      {/* projet == false */}
      <h2>Posts</h2>

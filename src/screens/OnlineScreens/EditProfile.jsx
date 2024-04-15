@@ -58,7 +58,7 @@ const EditProfile = () => {
     isLoading ? <ButtonLoader /> :
     <div className="bg-black text-white flex flex-col">
         <h2>Edit Profile</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
             <textarea cols="30" rows="10" value={bio} onChange={(event) => setBio(event.target.value)}>
                 {bio}
             </textarea>

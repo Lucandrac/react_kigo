@@ -32,7 +32,7 @@ const Register = () => {
     }).then((response) => {
       if (response.data.email) {
         const user = {
-          userId: response.data.userId,
+          userId: response.data.id,
           email: response.data.email,
           name: response.data.name,
           firstName: response.data.firstName

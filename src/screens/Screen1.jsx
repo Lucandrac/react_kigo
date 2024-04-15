@@ -8,6 +8,11 @@ const Screen1 = () => {
     <div className= 'bg-black text-white text-center'>
       <h1>Screen1</h1>
       {user && <Link to={`/profil/${user.userId}`}>Profil</Link>}
+      {/* Link ajouter un projet */}
+      <div>
+
+      <Link to={`/addproject/${user.userId}`}>Ajouter un projet</Link>
+      </div>
     </div>
   )
 }
