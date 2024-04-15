@@ -2,7 +2,7 @@ import React from 'react'
 
 const Screen1 = () => {
   return (
-    <div>Screen1</div>
+    <div className= 'bg-black text-white text-center'>Screen1</div>
   )
 }
 
