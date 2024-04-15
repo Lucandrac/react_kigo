@@ -6,6 +6,8 @@ import LoginScreen from "../screens/OfflineScreens/LoginScreen";
 import Screen1 from "../screens/Screen1";
 import Screen2 from "../screens/Screen2";
 import HomeOnline from "../screens/OnlineScreens/HomeOnline";
+import UserProfile from "../screens/OnlineScreens/UserProfile";
+import EditProfile from "../screens/OnlineScreens/EditProfile";
 
 const OnlineRouter = createBrowserRouter([
     {
@@ -18,11 +20,19 @@ const OnlineRouter = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Screen1 />
+                element: <Screen1 /> //TODO: Dashboard
             },
             {
                 path: "/register",
-                element: <Screen2 />
+                element: <Screen2 /> //TODO: Liste projets, add project, detail projet, edit projet, profil, edit profil, add post...
+            },
+            {
+                path: "/profil/:userId",
+                element: <UserProfile />
+            },
+            {
+                path: "/editprofil/:userId",
+                element: <EditProfile />
             }
         ]
     }
