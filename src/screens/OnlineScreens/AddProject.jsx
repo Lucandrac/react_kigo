@@ -8,7 +8,7 @@ import { fetchSkills } from '../../redux/skill/skillSlice';
 import ButtonLoader from '../../components/Loaders/ButtonLoader';
 import axios from 'axios';
 import { apiUrl } from '../../constants/apiConstants';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AddProject = () => {
 
@@ -22,6 +22,8 @@ const AddProject = () => {
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
 
+    const navigate = useNavigate();
+    
     const changeArray = (arr, entity) => {
         const newArr = [];
         arr.forEach((item) => {
@@ -37,26 +39,26 @@ const AddProject = () => {
             //change headers
             axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
 
-            // tout d'abord, créer le projet
-            const response = await axios.post(`${apiUrl}/projects`, {
-                filieres: changeArray(fils, 'filieres'),
-                skills: changeArray(comp, 'skills'),
-                isOpen: true,
-                isFinished: false,
-            });
-            console.log('projet crée')
-            //ensuite, créer le poste qui va avec
-            await axios.post(`${apiUrl}/posts`, {
+            //on crée d'abord le post
+            const response = await axios.post(`${apiUrl}/posts`, {
                 titre: title,
                 content: text,
                 dateCreation: new Date(),
                 dateModified: new Date(),
                 creator: `/api/users/${params.userId}`,
-                project: `/api/projects/${response.data.id}`, //TODO: invalid IRI "project" à corriger
-                genre: 'project',
+                genre: '/api/genres/1',
             });
 
             console.log('poste crée')
+            //puis le projet qui va être linké au post
+            await axios.post(`${apiUrl}/projects`, {
+                filieres: changeArray(fils, 'filieres'),
+                skills: changeArray(comp, 'skills'),
+                isOpen: true,
+                isFinished: false,
+                post: `/api/posts/${response.data.id}`,
+            });
+            console.log('projet crée')
     
             navigate(`/profil/${params.userId}`);
         } catch (error) {

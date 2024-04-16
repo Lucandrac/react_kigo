@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectFiliereData } from '../../redux/filiere/filiereSelector';
 import ButtonLoader from '../../components/Loaders/ButtonLoader';
 
+
 const EditProfile = () => {
     const [bio, setBio] = useState('');
     const [filiere, setFiliere] = useState('');
@@ -22,7 +23,7 @@ const EditProfile = () => {
         try {
           setIsLoading(true);
           const response = await axios.get(`${apiUrl}/profils?page=1&userId=${params.userId}`);
-          setFiliere(response.data['hydra:member'][0].filiere.id); 
+          response.data['hydra:member'][0].filiere ? setFiliere(response.data['hydra:member'][0].filiere.id) : setFiliere(1);
           setBio(response.data['hydra:member'][0].biography);
           setProfilId(response.data['hydra:member'][0].id);
           setIsLoading(false);
@@ -33,6 +34,7 @@ const EditProfile = () => {
     
     useEffect(() => {
         dispatch(fetchFilieres());
+        
         fetchProfil();
     }, [])
 
