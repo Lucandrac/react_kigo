@@ -32,7 +32,6 @@ const UserProfile = () => {
     fetchProfil();
     dispatch(fetchProjectPosts());
     dispatch(fetchNormalPosts());
-    console.log(profil)
   }, []);
 
   return (
@@ -53,10 +52,10 @@ const UserProfile = () => {
           <p>{post.content}</p>
           <p>{post.dateCreation}</p>
           <p>{post.dateModified}</p>
-          <p>{post.creator.firstName} {post.creator.lastName}</p>
+          <p>{post.creator.firstName} {post.creator.name}</p>
           <p>{post.project.isOpen ? 'Ouvert' : 'Ferme'}
           </p>
-          <Link to={`/`}>Voir le projet</Link>
+          <Link to={`/project/${post.project.id}`}>Voir le projet</Link>
         </div>
       ))}
      <h2>Projets participés</h2>
@@ -68,7 +67,7 @@ const UserProfile = () => {
          <p>{post.content}</p>
          <p>{post.dateCreation}</p>
          <p>{post.dateModified}</p>
-         <p>{post.creator.firstName} {post.creator.lastName}</p>
+         <p>{post.creator.firstName} {post.creator.name}</p>
          </div>
      ))}
     </div>

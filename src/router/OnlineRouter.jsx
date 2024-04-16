@@ -9,6 +9,7 @@ import HomeOnline from "../screens/OnlineScreens/HomeOnline";
 import UserProfile from "../screens/OnlineScreens/UserProfile";
 import EditProfile from "../screens/OnlineScreens/EditProfile";
 import AddProject from "../screens/OnlineScreens/AddProject";
+import ProjectDetail from "../screens/OnlineScreens/ProjectDetail";
 
 const OnlineRouter = createBrowserRouter([
     {
@@ -38,7 +39,11 @@ const OnlineRouter = createBrowserRouter([
             {
                 path: "/addproject/:userId",
                 element: <AddProject />
-            }
+            },
+            {
+                path: "/project/:id",
+                element: <ProjectDetail />
+            },
         ]
     }
 ])

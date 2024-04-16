@@ -8,6 +8,7 @@ const postSlice = createSlice({
     initialState: {
         posts: [],
         normalPosts: [],
+        projectPost: {},
         loading: false,
     },
 
@@ -18,6 +19,9 @@ const postSlice = createSlice({
         setNormalPosts: (state, action) => {
             state.normalPosts = action.payload;
         },
+        setProjectPost: (state, action) => {
+            state.projectPost = action.payload;
+        },
         setLoading: (state, action) => {
             state.loading = action.payload;
         }
@@ -25,7 +29,7 @@ const postSlice = createSlice({
 
 })
 
-export const { setPosts, setNormalPosts, setLoading } = postSlice.actions;
+export const { setPosts, setNormalPosts, setProjectPost, setLoading } = postSlice.actions;
 
 export const fetchProjectPosts = (id) => async (dispatch) => {
     try {
@@ -47,6 +51,18 @@ export const fetchNormalPosts = (id) => async (dispatch) => {
         dispatch(setNormalPosts(response.data['hydra:member']));
         dispatch(setLoading(false));
 
+    } catch (error) {
+        console.log(error);
+        dispatch(setLoading(false));
+    }
+}
+
+export const fetchProjectPost = (id) => async (dispatch) => {
+    try {
+        dispatch(setLoading(true));
+        const response = await axios.get(`${apiUrl}/projects/${id}`);
+        dispatch(setProjectPost(response.data));
+        dispatch(setLoading(false));
     } catch (error) {
         console.log(error);
         dispatch(setLoading(false));
