@@ -6,6 +6,7 @@ import axios from 'axios';
 import { selectPostData } from '../../redux/post/postSelector';
 import { fetchNormalPosts, fetchProjectPosts } from '../../redux/post/postSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { convertDate } from '../../tools/miscelaneousTools';
 
 const UserProfile = () => {
 
@@ -15,8 +16,7 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
 
-  const params = useParams();
-
+  const params = JSON.parse(localStorage.getItem('userInfos'));
   const fetchProfil = async () => {
     try {
       setIsLoading(true);
@@ -35,6 +35,7 @@ const UserProfile = () => {
   }, []);
 
   return (
+    loading ? <ButtonLoader /> :
     isLoading ? <ButtonLoader /> :
     <div>
       {/* avatar ici */}
@@ -50,8 +51,8 @@ const UserProfile = () => {
         <div key={post.id} className='bg-green-400 text-black'>
           <h3>{post.title}</h3>
           <p>{post.content}</p>
-          <p>{post.dateCreation}</p>
-          <p>{post.dateModified}</p>
+          <p>{convertDate(post.dateCreation)}</p>
+          <p>{convertDate(post.dateModified)}</p>
           <p>{post.creator.firstName} {post.creator.name}</p>
           <p>{post.project.isOpen ? 'Ouvert' : 'Ferme'}
           </p>
@@ -65,8 +66,8 @@ const UserProfile = () => {
        <div key={post.id} className='bg-green-500 text-black'>
          <h3>{post.title}</h3>
          <p>{post.content}</p>
-         <p>{post.dateCreation}</p>
-         <p>{post.dateModified}</p>
+         <p>{convertDate(post.dateCreation)}</p>
+         <p>{convertDate(post.dateModified)}</p>
          <p>{post.creator.firstName} {post.creator.name}</p>
          </div>
      ))}

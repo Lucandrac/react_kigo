@@ -9,11 +9,13 @@ import ButtonLoader from '../../components/Loaders/ButtonLoader';
 import axios from 'axios';
 import { apiUrl } from '../../constants/apiConstants';
 import { useNavigate, useParams } from 'react-router-dom';
+import { changeArray } from '../../tools/miscelaneousTools';
 
 const AddProject = () => {
 
     const dispatch = useDispatch();
-    const params = useParams();
+    const params = JSON.parse(localStorage.getItem('userInfos'));
+
     const { filieres, loading } = useSelector(selectFiliereData);
     const { skills } = useSelector(selectSkillData);
 
@@ -23,14 +25,6 @@ const AddProject = () => {
     const [text, setText] = useState('');
 
     const navigate = useNavigate();
-    
-    const changeArray = (arr, entity) => {
-        const newArr = [];
-        arr.forEach((item) => {
-            newArr.push(`/api/${entity}/${item}`);
-        })
-        return newArr
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();

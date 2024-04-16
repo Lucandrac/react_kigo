@@ -4,6 +4,7 @@ import { selectPostData } from '../../redux/post/postSelector';
 import { fetchAllProjectPosts } from '../../redux/post/postSlice';
 import { Link } from 'react-router-dom';
 import ButtonLoader from '../../components/Loaders/ButtonLoader';
+import { convertDate } from '../../tools/miscelaneousTools';
 
 const ProjectList = () => {
 
@@ -13,6 +14,7 @@ const ProjectList = () => {
     useEffect(() => {
         dispatch(fetchAllProjectPosts());
     }, [])
+    
   return (
     loading ? <ButtonLoader /> :
     <div className='flex flex-col'>
@@ -21,12 +23,13 @@ const ProjectList = () => {
             <div key={post.id} className='bg-green-400 text-black mt-1'>
                 <Link to={`/project/${post.project.id}`}>{post.titre}</Link>
                 <p>{post.content}</p>
-                <p>{post.dateCreation}</p>
-                <p>{post.dateModified}</p>
+                <p>{convertDate(post.dateCreation) }</p>
+                <p>{convertDate(post.dateModified)}</p>
                 <p>{post.creator.firstName} {post.creator.name}</p>
                 <Link to={'/'} >Rejoindre</Link>
             </div>
         ))}
+        
     </div>
   )
 }

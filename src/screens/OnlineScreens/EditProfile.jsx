@@ -9,6 +9,9 @@ import { selectFiliereData } from '../../redux/filiere/filiereSelector';
 import ButtonLoader from '../../components/Loaders/ButtonLoader';
 import { fetchSkills } from '../../redux/skill/skillSlice';
 import { selectSkillData } from '../../redux/skill/skillSelector';
+import { changeArray } from '../../tools/miscelaneousTools';
+import { selectTypeContactData } from '../../redux/typeContact/typeContactSelector';
+import { fetchTypeContact } from '../../redux/typeContact/typeContactSlice';
 
 
 const EditProfile = () => {
@@ -16,20 +19,16 @@ const EditProfile = () => {
   const [filiere, setFiliere] = useState('');
   const dispatch = useDispatch();
   const { filieres, loading } = useSelector(selectFiliereData);
+  const { typeContact } = useSelector(selectTypeContactData);
   const { skills } = useSelector(selectSkillData);
-  const params = useParams();
+  const params = JSON.parse(localStorage.getItem('userInfos'));
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [profil, setProfil] = useState({});
   const [profilId, setProfilId] = useState('');
   const [comp, setComp] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
-  const changeArray = (arr, entity) => {
-    const newArr = [];
-    arr.forEach((item) => {
-      newArr.push(`/api/${entity}/${item}`);
-    })
-    return newArr
-  }
 
 
   const fetchProfil = async () => {
@@ -38,6 +37,7 @@ const EditProfile = () => {
       const response = await axios.get(`${apiUrl}/profils?page=1&userId=${params.userId}`);
       response.data['hydra:member'][0].filiere ? setFiliere(response.data['hydra:member'][0].filiere.id) : setFiliere(1);
       setBio(response.data['hydra:member'][0].biography);
+      setProfil(response.data['hydra:member'][0]);
       setProfilId(response.data['hydra:member'][0].id);
       response.data['hydra:member'][0].skills.forEach((skill) => {
         setComp((prevComp) => [...prevComp, skill.id]);
@@ -50,27 +50,71 @@ const EditProfile = () => {
 
   useEffect(() => {
     dispatch(fetchSkills());
+    dispatch(fetchTypeContact());
     dispatch(fetchFilieres());
     fetchProfil();
   }, [])
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    if(profil.contacts){
+      setContacts(profil.contacts.map((contact) => ({
+        typeContact: contact.type.id,
+        value: contact.value,
+      })))
+    }
+  }, [profil.contacts])
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     //change headers
     axios.defaults.headers.patch['Content-Type'] = 'application/merge-patch+json';
 
     const filiereApi = `/api/filieres/${filiere}`;
-
-    axios.patch(`${apiUrl}/profils/${profilId}`, {
+    //TODO: Changer l'ordre pour que ça marche
+    await axios.patch(`${apiUrl}/profils/${profilId}`, {
       biography: bio,
       filiere: filiereApi,
-      skills: changeArray(comp, 'skills')
+      skills: changeArray(comp, 'skills'),
     });
 
-    navigate(`/profil/${params.userId}`);
 
-  }
+    //on récupère tout les contacts du profil
+    const response = await axios.get(`${apiUrl}/contacts?page=1&profil=${profilId}`);
+    console.log(response.data);
+   
+    //on delete tous les contacts qui ont une liaison avec le profil
+    if(Array.isArray(response.data['hydra:member'])){
+
+      response.data['hydra:member'].map((contact) => {
+        axios.delete(`${apiUrl}/contacts/${contact.id}`);
+      })
+      console.log('Contacts supprimés');
+      //puis on les reposts
+      axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
+      
+      contacts.map(async (contact) => {
+        console.log('contact : ', contact);
+         await axios.post(`${apiUrl}/contacts`, {
+          type: `/api/type_contacts/${contact.typeContact}`,
+          value: contact.value,
+          profil: `/api/profils/${profilId}`
+        });
+      })
+
+      console.log('Contacts crés');
+    }else{
+      console.log('Erreur lors de la création des contacts');
+    }
+      
+      navigate(`/profil/${params.userId}`);
+    }
+    
+  const handleChange = (index, field, value) => {
+    const updatedContacts = [...contacts];
+    updatedContacts[index][field] = value;
+    setContacts(updatedContacts);
+    console.log(contacts);
+  };
 
   const handleCheckBoxChangeComp = (event) => {
     const targetValue = event.target.value;
@@ -81,9 +125,19 @@ const EditProfile = () => {
     }
   }
 
+  const handleAddContact = (e) => {
+    e.preventDefault();
+    const newContact = {
+      typeContact: typeContact[0].id,
+      value: '',
+    };
+
+    setContacts([...contacts, newContact]);
+  };
+
   return (
     isLoading ? <ButtonLoader /> :
-    loading ? <ButtonLoader /> :
+      loading ? <ButtonLoader /> :
         <div className="bg-black text-white flex flex-col">
           <h2>Edit Profile</h2>
           <form onSubmit={handleSubmit} >
@@ -109,6 +163,28 @@ const EditProfile = () => {
                 </div>
               ))}
             </div>
+            <div className="flex flex-col">
+
+              {contacts.map((contact, index) => (
+                <div key={index} className="flex">
+                  <select
+                    value={contact.typeContact}
+                    onChange={(e) => handleChange(index, 'typeContact', e.target.value)}
+                  >
+                    {typeContact && typeContact.map((type) => (
+                      <option key={type.id} value={type.id}>{type.label}</option>
+                    ))}
+                  </select>
+                  <input
+                    type="text"
+                    value={contact.value}
+                    onChange={(e) => handleChange(index, 'value', e.target.value)}
+                  />
+                <div><button onClick={() => setContacts(contacts.filter((_, i) => i !== index))}>Delete</button></div>
+                </div>
+              ))}
+            </div>
+            <div><button onClick={handleAddContact}>Add Contact</button></div>
             <button type="submit">Submit</button>
           </form>
         </div>

@@ -1,9 +1,29 @@
-import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { checkUser } from '../../services/userServices';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const HomeOnline = () => {
 
   const user = JSON.parse(localStorage.getItem('userInfos'));
+
+  const {signOut} = useAuthContext();
+  const navigate = useNavigate();
+
+
+  const fetchUser = async () => {
+    const res = await checkUser(user);
+    if(user){
+      return;
+    }else {
+      signOut();
+      navigate('/login');
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+  },[user])
 
   return (
     <>
