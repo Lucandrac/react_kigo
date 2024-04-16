@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { selectPostData } from '../../redux/post/postSelector';
 import { fetchProjectPost } from '../../redux/post/postSlice';
 import ButtonLoader from '../../components/Loaders/ButtonLoader';

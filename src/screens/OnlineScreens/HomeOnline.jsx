@@ -8,12 +8,20 @@ const HomeOnline = () => {
   return (
     <>
     <div className= 'bg-black text-white text-center'>
-      <h1>Screen1</h1>
+      <div>
+        <Link to={'/'}>Kigo</Link>
+      </div>
       {user && <Link to={`/profil/${user.userId}`}>Profil</Link>}
       {/* Link ajouter un projet */}
       <div>
-
       <Link to={`/addproject/${user.userId}`}>Ajouter un projet</Link>
+      </div>
+      <div>
+        {/* TODO: */}
+        <Link to={`/addpost/${user.userId}`}>Ajouter un post</Link> 
+      </div>
+      <div>
+        <Link to={`/projects`}>Liste des projets</Link>
       </div>
     </div>
         <Outlet />
