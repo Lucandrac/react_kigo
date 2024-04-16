@@ -24,6 +24,7 @@ const ProjectList = () => {
                 <p>{post.dateCreation}</p>
                 <p>{post.dateModified}</p>
                 <p>{post.creator.firstName} {post.creator.name}</p>
+                <Link to={'/'} >Rejoindre</Link>
             </div>
         ))}
     </div>

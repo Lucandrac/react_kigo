@@ -77,7 +77,7 @@ const EditProfile = () => {
     if (event.target.checked && !comp.includes(targetValue)) {
       setComp((prevComp) => [...prevComp, targetValue]);
     } else {
-      setComp((prevComp) => prevComp.filter((c) => c !== targetValue));
+      setComp((prevComp) => prevComp.filter((c) => c != targetValue));
     }
   }
 
