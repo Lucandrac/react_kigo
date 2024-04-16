@@ -70,7 +70,6 @@ const EditProfile = () => {
     axios.defaults.headers.patch['Content-Type'] = 'application/merge-patch+json';
 
     const filiereApi = `/api/filieres/${filiere}`;
-    //TODO: Changer l'ordre pour que ça marche
     await axios.patch(`${apiUrl}/profils/${profilId}`, {
       biography: bio,
       filiere: filiereApi,
@@ -80,7 +79,6 @@ const EditProfile = () => {
 
     //on récupère tout les contacts du profil
     const response = await axios.get(`${apiUrl}/contacts?page=1&profil=${profilId}`);
-    console.log(response.data);
    
     //on delete tous les contacts qui ont une liaison avec le profil
     if(Array.isArray(response.data['hydra:member'])){
@@ -88,12 +86,10 @@ const EditProfile = () => {
       response.data['hydra:member'].map((contact) => {
         axios.delete(`${apiUrl}/contacts/${contact.id}`);
       })
-      console.log('Contacts supprimés');
       //puis on les reposts
       axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
       
       contacts.map(async (contact) => {
-        console.log('contact : ', contact);
          await axios.post(`${apiUrl}/contacts`, {
           type: `/api/type_contacts/${contact.typeContact}`,
           value: contact.value,
@@ -101,7 +97,6 @@ const EditProfile = () => {
         });
       })
 
-      console.log('Contacts crés');
     }else{
       console.log('Erreur lors de la création des contacts');
     }
