@@ -58,11 +58,14 @@ const ProjectList = () => {
                 <p>{convertDate(post.dateCreation) }</p>
                 <p>{convertDate(post.dateModified)}</p>
                 <p>{post.creator.firstName} {post.creator.name}</p>
-                        {!(post.isOpen || (post.creator.id !== `/api/users/${user.userId}`)) ? <p>Impossible de rejoindre</p> :
+
+                {!(post.isOpen || post.creator !== `/api/users/${user.userId}`) ? <p>Impossible de rejoindre</p> :
                         isLoading ? <ButtonLoader />
                         : (isSent.includes(post.project.id)
                         ? <button disabled>Invitation envoyé</button>
                         : <button onClick={(e) => handleClick(e, post.project.id)}>Participer</button>)}
+
+
             </div>
         ))}
         
