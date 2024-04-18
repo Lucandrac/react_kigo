@@ -4,13 +4,13 @@ import HomeOffline from "../screens/OfflineScreens/HomeOffline";
 import Register from "../screens/OfflineScreens/Register";
 import LoginScreen from "../screens/OfflineScreens/LoginScreen";
 import Screen1 from "../screens/Screen1";
-import Screen2 from "../screens/Screen2";
 import HomeOnline from "../screens/OnlineScreens/HomeOnline";
 import UserProfile from "../screens/OnlineScreens/UserProfile";
 import EditProfile from "../screens/OnlineScreens/EditProfile";
 import AddProject from "../screens/OnlineScreens/AddProject";
 import ProjectDetail from "../screens/OnlineScreens/ProjectDetail";
 import ProjectList from "../screens/OnlineScreens/ProjectList";
+import AddPost from "../screens/OnlineScreens/AddPost";
 
 const OnlineRouter = createBrowserRouter([
     {
@@ -26,8 +26,8 @@ const OnlineRouter = createBrowserRouter([
                 element: <Screen1 /> //TODO: Dashboard
             },
             {
-                path: "/register",
-                element: <Screen2 /> 
+                path: "/addpost",
+                element: <AddPost />
             },
             {
                 path: "/profil/:userId",
