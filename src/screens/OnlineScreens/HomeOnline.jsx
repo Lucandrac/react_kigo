@@ -17,7 +17,7 @@ const HomeOnline = () => {
       return;
     }else {
       signOut();
-      navigate('/login');
+      navigate('/');
     }
   }
 
@@ -42,6 +42,9 @@ const HomeOnline = () => {
       </div>
       <div>
         <Link to={`/projects`}>Liste des projets</Link>
+      </div>
+      <div>
+        <button onClick={() => signOut()}>Se deconnecter</button>
       </div>
     </div>
         <Outlet />

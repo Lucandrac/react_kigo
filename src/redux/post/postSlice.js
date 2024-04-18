@@ -95,7 +95,7 @@ export const fetchAllProjectPosts = () => async (dispatch) => {
 export const fetchAllParticipatingProjects = (id) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
-        const response = await axios.get(`${apiUrl}/projects?page=1&participant=%22%2Fapi%2Fusers%2F${id}%22`);
+        const response = await axios.get(`${apiUrl}/projects?page=1&participant.id=${id}`);
         dispatch(setAllParticipatingProjects(response.data['hydra:member']));
         dispatch(setLoading(false));
     } catch (error) {

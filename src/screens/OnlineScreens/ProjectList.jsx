@@ -24,7 +24,7 @@ const ProjectList = () => {
 
     const handleClick = async (e, id) => {
         e.preventDefault();
-
+     
         setIsLoading(true);
         //on créer une invitation
         try {
@@ -58,10 +58,11 @@ const ProjectList = () => {
                 <p>{convertDate(post.dateCreation) }</p>
                 <p>{convertDate(post.dateModified)}</p>
                 <p>{post.creator.firstName} {post.creator.name}</p>
-                {isLoading ? <ButtonLoader />
-                 : (isSent.includes(post.project.id)
-                  ? <button disabled>Invitation envoyé</button>
-                   : <button onClick={(e) => handleClick(e, post.project.id)}>Participer</button>)}
+                        {!(post.isOpen || (post.creator.id !== `/api/users/${user.userId}`)) ? <p>Impossible de rejoindre</p> :
+                        isLoading ? <ButtonLoader />
+                        : (isSent.includes(post.project.id)
+                        ? <button disabled>Invitation envoyé</button>
+                        : <button onClick={(e) => handleClick(e, post.project.id)}>Participer</button>)}
             </div>
         ))}
         
