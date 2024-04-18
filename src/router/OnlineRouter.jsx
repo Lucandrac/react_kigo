@@ -27,7 +27,7 @@ const OnlineRouter = createBrowserRouter([
             },
             {
                 path: "/register",
-                element: <Screen2 /> //TODO: Liste projets, add project, detail projet, edit projet, profil, edit profil, add post...
+                element: <Screen2 /> 
             },
             {
                 path: "/profil/:userId",
@@ -38,7 +38,7 @@ const OnlineRouter = createBrowserRouter([
                 element: <EditProfile />
             },
             {
-                path: "/addproject/:userId",
+                path: "/addproject",
                 element: <AddProject />
             },
             {

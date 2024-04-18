@@ -4,6 +4,7 @@ import skillReducer from "./skill/skillSlice";
 import postReducer from "./post/postSlice";
 import typeContactReducer from "./typeContact/typeContactSlice";
 import categoryReducer from "./category/categorySlice";
+import inviteReducer from "./invite/inviteSlice";
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         posts: postReducer,
         typeContact: typeContactReducer,
         categories: categoryReducer,
+        invites: inviteReducer,
     }
 })
 

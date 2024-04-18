@@ -10,6 +10,7 @@ const postSlice = createSlice({
         normalPosts: [],
         projectPost: {},
         allProjectPosts: [],
+        allParticipatingProjects: [],
         loading: false,
     },
 
@@ -26,6 +27,9 @@ const postSlice = createSlice({
         setAllProjectPosts: (state, action) => {
             state.allProjectPosts = action.payload;
         },
+        setAllParticipatingProjects: (state, action) => {
+            state.allParticipatingProjects = action.payload;
+        },
         setLoading: (state, action) => {
             state.loading = action.payload;
         }
@@ -33,8 +37,9 @@ const postSlice = createSlice({
 
 })
 
-export const { setPosts, setNormalPosts, setProjectPost, setAllProjectPosts, setLoading } = postSlice.actions;
+export const { setPosts, setNormalPosts, setProjectPost, setAllProjectPosts, setAllParticipatingProjects, setLoading } = postSlice.actions;
 
+//tous les posts de projects crées par l'utilisateur
 export const fetchProjectPosts = (id) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
@@ -48,6 +53,7 @@ export const fetchProjectPosts = (id) => async (dispatch) => {
     }
 }
 
+//tous les posts normal de l'utilisateur
 export const fetchNormalPosts = (id) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
@@ -60,7 +66,7 @@ export const fetchNormalPosts = (id) => async (dispatch) => {
         dispatch(setLoading(false));
     }
 }
-
+//un seul project
 export const fetchProjectPost = (id) => async (dispatch) => {
     try {
         dispatch(setLoading(true));
@@ -72,12 +78,25 @@ export const fetchProjectPost = (id) => async (dispatch) => {
         dispatch(setLoading(false));
     }
 }
-
+//tous les posts de projects
 export const fetchAllProjectPosts = () => async (dispatch) => {
     try {
         dispatch(setLoading(true));
         const response = await axios.get(`${apiUrl}/posts?page=1&genre=1&isOpen=true`);
         dispatch(setAllProjectPosts(response.data['hydra:member']));
+        dispatch(setLoading(false));
+    } catch (error) {
+        console.log(error);
+        dispatch(setLoading(false));
+    }
+}
+
+//tous les projects avec l'utilisateur en participant ou createur
+export const fetchAllParticipatingProjects = (id) => async (dispatch) => {
+    try {
+        dispatch(setLoading(true));
+        const response = await axios.get(`${apiUrl}/projects?page=1&participant=%22%2Fapi%2Fusers%2F${id}%22`);
+        dispatch(setAllParticipatingProjects(response.data['hydra:member']));
         dispatch(setLoading(false));
     } catch (error) {
         console.log(error);

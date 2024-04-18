@@ -34,11 +34,11 @@ const HomeOnline = () => {
       {user && <Link to={`/profil/${user.userId}`}>Profil</Link>}
       {/* Link ajouter un projet */}
       <div>
-      <Link to={`/addproject/${user.userId}`}>Ajouter un projet</Link>
+      <Link to={`/addproject`}>Ajouter un projet</Link>
       </div>
       <div>
         {/* TODO: */}
-        <Link to={`/addpost/${user.userId}`}>Ajouter un post</Link> 
+        <Link to={`/addpost`}>Ajouter un post</Link> 
       </div>
       <div>
         <Link to={`/projects`}>Liste des projets</Link>

@@ -16,7 +16,7 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
 
-  const params = JSON.parse(localStorage.getItem('userInfos'));
+  const params = useParams();
   const fetchProfil = async () => {
     try {
       setIsLoading(true);
