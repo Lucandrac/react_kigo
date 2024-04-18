@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useState } from 'react';
 import { createContext } from 'react';
+import { Navigate } from 'react-router-dom';
 
 //creation du contexte d'authentification
 const AuthContext = createContext({

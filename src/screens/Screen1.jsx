@@ -92,7 +92,7 @@ const Screen1 = () => {
       {invites && invites.map((invite) => (
         <div key={invite.id} className='bg-red-400 text-black flex'>
           <div>
-            <p>{invite.userId.name} {invite.userId.firstName}</p>
+            <p>{invite.userId.name} {invite.userId.firstName} : {invite.project.post.titre}</p>
             <p>{convertDate(invite.dateCreated)}</p>
           </div>
           <div className='flex flex-col ml-4'>

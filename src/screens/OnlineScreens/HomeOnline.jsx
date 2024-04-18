@@ -44,7 +44,7 @@ const HomeOnline = () => {
         <Link to={`/projects`}>Liste des projets</Link>
       </div>
       <div>
-        <button onClick={() => signOut()}>Se deconnecter</button>
+        <button onClick={() => {signOut(); navigate('/')}}>Se deconnecter</button>
       </div>
     </div>
         <Outlet />
