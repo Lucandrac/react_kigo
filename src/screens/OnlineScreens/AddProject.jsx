@@ -10,6 +10,8 @@ import axios from 'axios';
 import { apiUrl } from '../../constants/apiConstants';
 import { useNavigate, useParams } from 'react-router-dom';
 import { changeArray } from '../../tools/miscelaneousTools';
+import { fetchCategories } from '../../redux/category/categorySlice';
+import { selectCategoryData } from '../../redux/category/categorySelector';
 
 const AddProject = () => {
 
@@ -18,11 +20,13 @@ const AddProject = () => {
 
     const { filieres, loading } = useSelector(selectFiliereData);
     const { skills } = useSelector(selectSkillData);
+    const { categories } = useSelector(selectCategoryData);
 
     const [fils, setFils] = useState([]);
     const [comp, setComp] = useState([]);
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
+    const [cat, setCat] = useState('');
 
     const navigate = useNavigate();
 
@@ -51,6 +55,7 @@ const AddProject = () => {
                 isOpen: true,
                 isFinished: false,
                 post: `/api/posts/${response.data.id}`,
+                category: `/api/categories/${cat}`,
             });
             console.log('projet crée')
     
@@ -81,6 +86,7 @@ const AddProject = () => {
     }
 
     useEffect(() => {
+        dispatch(fetchCategories());
         dispatch(fetchSkills());
         dispatch(fetchFilieres());
     }, [])
@@ -111,6 +117,13 @@ const AddProject = () => {
                     </div>
                 ))}
             </div>
+            <h2>Catégorie</h2>
+            <select value={cat} onChange={(event) => setCat(event.target.value)}>
+              {categories && categories.map((category) => (
+                <option key={category.id} value={category.id}>{category.label}</option>
+              ))}
+            </select>
+
 
             <button type="submit">Ajouter</button>
         </form>
