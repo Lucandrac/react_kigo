@@ -97,7 +97,6 @@ const AddProject = () => {
         <h1>AddProject</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center">
             <CustomInput label={'Titre'} type={'text'} state={title} callable={(event) => setTitle(event.target.value)}/>
-            {/* change to textarea */}
             <textarea cols="30" rows="10" value={text} onChange={(event) => setText(event.target.value)}></textarea> 
             <h2>Filieres attendues</h2>
             <div className="flex flex-wrap">
