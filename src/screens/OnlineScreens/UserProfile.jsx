@@ -8,6 +8,7 @@ import { fetchNormalPosts, fetchProjectPosts } from '../../redux/post/postSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { convertDate } from '../../tools/miscelaneousTools';
 
+
 const UserProfile = () => {
 
   const [profil, setProfil] = useState({});
@@ -31,11 +32,10 @@ const UserProfile = () => {
   useEffect(() => {
     fetchProfil();
     dispatch(fetchProjectPosts());
-    dispatch(fetchNormalPosts());
+    dispatch(fetchNormalPosts(params.userId));
   }, []);
 
   return (
-    console.log(normalPosts),
     loading ? <ButtonLoader /> :
     isLoading ? <ButtonLoader /> :
     <div>
@@ -74,7 +74,6 @@ const UserProfile = () => {
           {post.media && post.media.map((media) => (
             <img src={`${apiRoot}/upload/${media.url}`} alt={media.label} />
           ))}
-          
           </div>
          </div>
      ))}

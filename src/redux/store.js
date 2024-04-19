@@ -5,6 +5,7 @@ import postReducer from "./post/postSlice";
 import typeContactReducer from "./typeContact/typeContactSlice";
 import categoryReducer from "./category/categorySlice";
 import inviteReducer from "./invite/inviteSlice";
+import avatarReducer from "./avatar/avatarSlice";
 
 const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
         typeContact: typeContactReducer,
         categories: categoryReducer,
         invites: inviteReducer,
+        avatars: avatarReducer,
     }
 })
 

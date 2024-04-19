@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import CustomInput from '../../components/CustomInput';
 import axios from 'axios';
-import { apiUrl } from '../../constants/apiConstants';
+import { apiRoot, apiUrl } from '../../constants/apiConstants';
 import { fetchFilieres } from '../../redux/filiere/filiereSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFiliereData } from '../../redux/filiere/filiereSelector';
@@ -12,6 +12,8 @@ import { selectSkillData } from '../../redux/skill/skillSelector';
 import { changeArray } from '../../tools/miscelaneousTools';
 import { selectTypeContactData } from '../../redux/typeContact/typeContactSelector';
 import { fetchTypeContact } from '../../redux/typeContact/typeContactSlice';
+import { fetchAvatars } from '../../redux/avatar/avatarSlice';
+import { selectAvatarData } from '../../redux/avatar/avatarSelector';
 
 
 const EditProfile = () => {
@@ -28,6 +30,8 @@ const EditProfile = () => {
   const [profilId, setProfilId] = useState('');
   const [comp, setComp] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const { avatars } = useSelector(selectAvatarData);
+  const [picture, setPicture] = useState('');
 
 
 
@@ -39,6 +43,7 @@ const EditProfile = () => {
       setBio(response.data['hydra:member'][0].biography);
       setProfil(response.data['hydra:member'][0]);
       setProfilId(response.data['hydra:member'][0].id);
+      response.data['hydra:member'][0].avatar ? setPicture(response.data['hydra:member'][0].avatar.id) : setPicture(1);
       response.data['hydra:member'][0].skills.forEach((skill) => {
         setComp((prevComp) => [...prevComp, skill.id]);
       });
@@ -49,6 +54,7 @@ const EditProfile = () => {
   }
 
   useEffect(() => {
+    dispatch(fetchAvatars());
     dispatch(fetchSkills());
     dispatch(fetchTypeContact());
     dispatch(fetchFilieres());
@@ -56,7 +62,7 @@ const EditProfile = () => {
   }, [])
 
   useEffect(() => {
-    if(profil.contacts){
+    if (profil.contacts) {
       setContacts(profil.contacts.map((contact) => ({
         typeContact: contact.type.id,
         value: contact.value,
@@ -76,40 +82,48 @@ const EditProfile = () => {
       skills: changeArray(comp, 'skills'),
     });
 
+    await axios.patch (`${apiUrl}/users/${params.userId}`, {
+      avatar: `/api/avatars/${picture}`
+    });
 
     //on récupère tout les contacts du profil
     const response = await axios.get(`${apiUrl}/contacts?page=1&profil=${profilId}`);
-   
+
     //on delete tous les contacts qui ont une liaison avec le profil
-    if(Array.isArray(response.data['hydra:member'])){
+    if (Array.isArray(response.data['hydra:member'])) {
 
       response.data['hydra:member'].map((contact) => {
         axios.delete(`${apiUrl}/contacts/${contact.id}`);
       })
       //puis on les reposts
       axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
-      
+
       contacts.map(async (contact) => {
-         await axios.post(`${apiUrl}/contacts`, {
+        await axios.post(`${apiUrl}/contacts`, {
           type: `/api/type_contacts/${contact.typeContact}`,
           value: contact.value,
           profil: `/api/profils/${profilId}`
         });
       })
 
-    }else{
+    } else {
       console.log('Erreur lors de la création des contacts');
     }
-      
-      navigate(`/profil/${params.userId}`);
-    }
-    
+
+    navigate(`/profil/${params.userId}`);
+  }
+
   const handleChange = (index, field, value) => {
     const updatedContacts = [...contacts];
     updatedContacts[index][field] = value;
     setContacts(updatedContacts);
     console.log(contacts);
   };
+
+  const handleSwitchPicture = (event) => {
+    setPicture(event.target.value);
+    
+  }
 
   const handleCheckBoxChangeComp = (event) => {
     const targetValue = event.target.value;
@@ -175,7 +189,24 @@ const EditProfile = () => {
                     value={contact.value}
                     onChange={(e) => handleChange(index, 'value', e.target.value)}
                   />
-                <div><button onClick={() => setContacts(contacts.filter((_, i) => i !== index))}>Delete</button></div>
+                  <div><button onClick={() => setContacts(contacts.filter((_, i) => i !== index))}>Delete</button></div>
+                </div>
+              ))}
+            </div>
+            <div className='flex flex-wrap flex-row gap-2'>
+              {avatars && avatars.map((avatar) => (
+                <div key={avatar.id}>
+                  <input
+                    type="radio"
+                    value={avatar.id}
+                    defaultChecked={picture === avatar.id}
+                    onChange={handleSwitchPicture}
+                    name="avatar"
+                  />
+                  <img
+                    src={`${apiRoot}/images/avatars/${avatar.imagePath}`}
+                    alt={avatar.imagePath}
+                  />
                 </div>
               ))}
             </div>
