@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { apiUrl } from '../../constants/apiConstants'
+import { apiRoot, apiUrl } from '../../constants/apiConstants'
 import { Link, useParams } from 'react-router-dom'
 import ButtonLoader from '../../components/Loaders/ButtonLoader';
 import axios from 'axios';
@@ -35,6 +35,7 @@ const UserProfile = () => {
   }, []);
 
   return (
+    console.log(normalPosts),
     loading ? <ButtonLoader /> :
     isLoading ? <ButtonLoader /> :
     <div>
@@ -69,6 +70,12 @@ const UserProfile = () => {
          <p>{convertDate(post.dateCreation)}</p>
          <p>{convertDate(post.dateModified)}</p>
          <p>{post.creator.firstName} {post.creator.name}</p>
+         <div>
+          {post.media && post.media.map((media) => (
+            <img src={`${apiRoot}/upload/${media.url}`} alt={media.label} />
+          ))}
+          
+          </div>
          </div>
      ))}
     </div>

@@ -3,10 +3,13 @@ import CustomInput from '../../components/CustomInput';
 import { FileInput, Label } from 'flowbite-react';
 import axios from 'axios';
 import { apiUrl } from '../../constants/apiConstants';
+import { useNavigate } from 'react-router-dom';
 
 const AddPost = () => {
 
     const user = JSON.parse(localStorage.getItem('userInfos'));
+
+    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
@@ -15,7 +18,6 @@ const AddPost = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(image);
         
         //TODO: Résoudre le bug de l'upload de l'image
         // problème de format multipart/form-data accepter par l'api
@@ -33,17 +35,15 @@ const AddPost = () => {
                 genre: '/api/genres/2',
             });
 
-            axios.defaults.headers['Content-Type'] = 'multipart/form-data';
             const formData = new FormData();
             formData.append('file', image);
             formData.append('post', `/api/posts/${response.data.id}`);
-            formData.append('url', 'imagepost');
-            formData.append('label', 'label');
+            formData.append('postId', response.data.id);
 
-            await axios.post(`${apiUrl}/medias`, formData);
+            const response2 = await axios.post(`${apiUrl}/medias`, formData);
 
+            navigate(`/profil/${user.userId}`)
             setIsLoading(false);
-            console.log('poste crée')
         } catch (error) {
             console.log('Erreur lors de la création du post : ' + error);
         }
@@ -63,7 +63,7 @@ const AddPost = () => {
                 <div className="mb-2 block">
                     <Label htmlFor="file-upload" value="Upload file" />
                 </div>
-                <FileInput id="file-upload" value={image} onChange={(event) => setImage(event.target.value)}/>
+                <input type="file" id="file-upload" onChange={(event) => setImage(event.target.files[0])} />
                 <button type="submit">Poster</button>
             </form>
         </div>
