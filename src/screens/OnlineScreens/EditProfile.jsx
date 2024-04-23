@@ -167,12 +167,13 @@ const EditProfile = () => {
             <textarea cols="30" rows="6" value={bio} onChange={(event) => setBio(event.target.value)} className='shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'>
               {bio}
             </textarea>
+            <h2 className="text-center text-purple-900 text-bold text-xl m-3">Filière</h2>
             <select value={filiere} onChange={(event) => setFiliere(event.target.value)} className='my-3 shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'>
               {filieres && filieres.map((filiere) => (
                 <option key={filiere.id} value={filiere.id}>{filiere.label}</option>
               ))}
             </select>
-
+              <h2 className="text-center text-purple-900 text-bold text-xl m-3">Compétences</h2>
             <div className="flex flex-wrap my-3">
               {skills && skills.map((skill) => (
                 <div key={skill.id} className="bg-purple-700 text-white rounded-lg mx-2 px-1">
@@ -186,6 +187,8 @@ const EditProfile = () => {
                 </div>
               ))}
             </div>
+              <h2 className="text-center text-purple-900 text-bold text-xl m-3">Contacts</h2>
+
             <div className="flex flex-col">
 
               {contacts.map((contact, index) => (
@@ -210,6 +213,7 @@ const EditProfile = () => {
               ))}
             </div>
               <div><button onClick={handleAddContact} className='text-white bg-purple-700 rounded-lg p-2'>Ajouter un Contact</button></div>
+              <h2 className="text-center text-purple-900 text-bold text-xl m-3">Avatar</h2>
             <div className='flex flex-wrap flex-row gap-2 border border-purple-700 mt-2 mx-1'>
               {avatars && avatars.map((avatar) => (
                 <div key={avatar.id}>

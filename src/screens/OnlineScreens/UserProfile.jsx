@@ -63,6 +63,13 @@ const UserProfile = () => {
               </div>
             ))}
           </div>
+            <h2 className='mt-3 text-purple-800 text-center lg:text-2xl'>Contacts</h2>
+            {profil.contacts && profil.contacts.map((contact) => (
+              <div key={contact.id} className='m-3'>
+                <p className='text-sm text-purple-800 lg:text-lg'>{contact.type.label} : {contact.value}</p>
+              </div>
+            ))}
+
           <h2 className='mt-3 text-purple-800 text-center lg:text-2xl'>Projets crées : </h2>
           {posts && posts.map((post) => (
              <div key={post.id} className='mb-3'>
