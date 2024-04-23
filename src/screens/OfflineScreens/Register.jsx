@@ -59,8 +59,10 @@ const Register = () => {
   }
 
   return (
-    <div className='flex flex-1 flex-col h-screen justify-start items-center bg-black'>
-      <h2 className='font-bold text-white text-xl pb-5'>S'enregistrer</h2>
+    <div className='flex flex-1 flex-col h-screen justify-start items-center'>
+        <img className="absolute top-0 z-[-1]" src={`background.svg`} alt='background'/>
+        <img src={`${apiRoot}/images/logo.png`} alt="logo kigo" className='pt-12' />
+
       <form onSubmit={handleSubmit} className='max-w-md mx-auto'>
 
         <CustomInput state={name} label='Nom' type='text' callable={(event) => setName(event.target.value)} />
@@ -70,13 +72,11 @@ const Register = () => {
 
         <CustomInput state={password} label='Mot de passe' type='password' callable={(event) => setPassword(event.target.value)} />
 
-        <Link to='/' className='text-white hover:text-green_06'>Vous avez déjà un compte ?</Link>
+        <Link to='/' className='text-gray-400 hover:text-gray-300 hover:underline '>Vous avez déjà un compte ?</Link>
         <div className="flex items-center justify-center pt-5">
         {
 							isLoading ? <ButtonLoader /> : 
-         <button type='submit' className='bg-green hover:bg-green_top text-white font-bold py-2 px-4 rounded'>
-            S'enregistrer
-          </button>
+              <button type='submit' className='mt-12 w-[300px]'><img src={`gobutton.svg`} alt="bouton go" /></button>
 						}
         </div>
       </form>

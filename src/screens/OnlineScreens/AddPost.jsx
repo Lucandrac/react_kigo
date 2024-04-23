@@ -51,20 +51,18 @@ const AddPost = () => {
 
     return (
         <div>
-            <h2>Ajouter un post</h2>
+            <h2 className="text-3xl text-purple-900 font-bold m-3 ">Ajouter un post</h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center">
                 <CustomInput label={'Titre'} type={'text'} state={title} callable={(event) => setTitle(event.target.value)} />
                 <div className="flex flex-col">
-                    <label htmlFor=""> Texte</label>
-                    <textarea cols="30" rows="10" value={text} onChange={(event) => setText(event.target.value)}></textarea>
+                    <h2 className="text-xl text-purple-700 m-2">Texte</h2>
+                    <textarea cols="30" rows="10" value={text} onChange={(event) => setText(event.target.value)} className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'></textarea>
                 </div>
                 {/* image file */}
-                <div className="mb-2 block">
-                    <Label htmlFor="file-upload" value="Upload file" />
-                </div>
-                <input type="file" id="file-upload" onChange={(event) => setImage(event.target.files[0])} />
-                <button type="submit">Poster</button>
+                <h2 className="text-xl text-purple-700 m-2">Ajouter une image</h2>
+                <input type="file" id="file-upload" onChange={(event) => setImage(event.target.files[0])} className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'/>
+                <button type='submit' className='mt-12 w-[300px]'><img src={`gobutton.svg`} alt="bouton go" /></button>
             </form>
         </div>
     )

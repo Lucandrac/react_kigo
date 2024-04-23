@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navbar_color {
+    background: linear-gradient(242.67deg, #8F00FF 18.7%, #BF008A 82.26%);
+}

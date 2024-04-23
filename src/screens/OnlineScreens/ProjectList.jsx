@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import ButtonLoader from '../../components/Loaders/ButtonLoader';
 import { convertDate } from '../../tools/miscelaneousTools';
 import axios from 'axios';
-import { apiUrl } from '../../constants/apiConstants';
+import { apiRoot, apiUrl } from '../../constants/apiConstants';
 
 const ProjectList = () => {
 
@@ -50,27 +50,35 @@ const ProjectList = () => {
   return (
     loading ? <ButtonLoader /> :
     <div className='flex flex-col'>
-        <h1>Liste des projets</h1>
+         <h1 className='text-3xl font-bold mb-3 text-purple-900'>Liste des projets</h1>
         {allProjectPosts && allProjectPosts.map((post) => (
-            <div key={post.id} className='bg-green-400 text-black mt-1'>
-                <Link to={`/project/${post.project.id}`}>{post.titre}</Link>
-                <p>{post.content}</p>
-                <p>{convertDate(post.dateCreation) }</p>
-                <p>{convertDate(post.dateModified)}</p>
-                <p>{post.creator.firstName} {post.creator.name}</p>
-
-                {!(post.isOpen || post.creator !== `/api/users/${user.userId}`) ? <p>Impossible de rejoindre</p> :
-                        isLoading ? <ButtonLoader />
-                        : (isSent.includes(post.project.id)
-                        ? <button disabled>Invitation envoyé</button>
-                        : <button onClick={(e) => handleClick(e, post.project.id)}>Participer</button>)}
-
-
-            </div>
+           <div key={post.id} className='mb-3'>
+           <div className="flex">
+             {post.creator.avatar &&
+             <img src={`${apiRoot}/images/avatars/${post.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8'/>
+             }
+             <div className="flex flex-col">
+               <Link to={`/profil/${post.creator.id}`}>
+                 <p className="font-bold text-purple-700 underline">{post.creator.firstName}</p>
+               </Link>
+               <p className='text-sm'>{post.creator.profil.filiere.label}</p>
+             </div>
+           </div>
+           { post.media && post.media.length > 0 &&
+           <div className="flex justify-center"><img src={`${apiRoot}/upload/${post.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4'/></div>
+           }
+           {post.project && 
+           <Link to={`/project/${post.project.id}`}><p className='ml-4 text-purple-900 font-bold'>{post.titre}</p></Link>
+           }
+        {!(post.isOpen || post.creator !== `/api/users/${user.userId}`) ? <p>Impossible de rejoindre</p> :
+                                isLoading ? <ButtonLoader />
+                                : (isSent.includes(post.project.id)
+                                ? <button disabled className='text-purple-800 text-sm ml-3'>Invitation envoyé</button>
+                                : <button onClick={(e) => handleClick(e, post.project.id)} className='text-purple-800 text-sm ml-3 bg-purple-300 rounded px-2'>Participer</button>)}
+         </div>
         ))}
-        
+                
     </div>
   )
 }
-
 export default ProjectList

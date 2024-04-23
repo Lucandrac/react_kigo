@@ -14,6 +14,7 @@ import { selectTypeContactData } from '../../redux/typeContact/typeContactSelect
 import { fetchTypeContact } from '../../redux/typeContact/typeContactSlice';
 import { fetchAvatars } from '../../redux/avatar/avatarSlice';
 import { selectAvatarData } from '../../redux/avatar/avatarSelector';
+import { FaTrashAlt } from 'react-icons/fa';
 
 
 const EditProfile = () => {
@@ -147,21 +148,21 @@ const EditProfile = () => {
   return (
     isLoading ? <ButtonLoader /> :
       loading ? <ButtonLoader /> :
-        <div className="bg-black text-white flex flex-col">
-          <h2>Edit Profile</h2>
-          <form onSubmit={handleSubmit} >
-            <textarea cols="30" rows="10" value={bio} onChange={(event) => setBio(event.target.value)}>
+        <div className="flex flex-col">
+          <h2 className="text-center text-purple-900 text-bold text-3xl m-3">Modification du Profil</h2>
+          <form onSubmit={handleSubmit} className='flex flex-col justify-center items-center'>
+            <textarea cols="30" rows="6" value={bio} onChange={(event) => setBio(event.target.value)} className='shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'>
               {bio}
             </textarea>
-            <select value={filiere} onChange={(event) => setFiliere(event.target.value)}>
+            <select value={filiere} onChange={(event) => setFiliere(event.target.value)} className='my-3 shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'>
               {filieres && filieres.map((filiere) => (
                 <option key={filiere.id} value={filiere.id}>{filiere.label}</option>
               ))}
             </select>
 
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap my-3">
               {skills && skills.map((skill) => (
-                <div key={skill.id}>
+                <div key={skill.id} className="bg-purple-700 text-white rounded-lg mx-2 px-1">
                   <input
                     type="checkbox"
                     value={skill.id}
@@ -175,10 +176,11 @@ const EditProfile = () => {
             <div className="flex flex-col">
 
               {contacts.map((contact, index) => (
-                <div key={index} className="flex">
+                <div key={index} className="flex justify-center items-center">
                   <select
                     value={contact.typeContact}
                     onChange={(e) => handleChange(index, 'typeContact', e.target.value)}
+                    className='my-3 shadow appearance-none border rounded leading-tight focus:outline-none focus:shadow-outline w-1/2'
                   >
                     {typeContact && typeContact.map((type) => (
                       <option key={type.id} value={type.id}>{type.label}</option>
@@ -188,12 +190,14 @@ const EditProfile = () => {
                     type="text"
                     value={contact.value}
                     onChange={(e) => handleChange(index, 'value', e.target.value)}
+                    className='my-3 shadow appearance-none border rounded leading-tight focus:outline-none focus:shadow-outline w-4/5'
                   />
-                  <div><button onClick={() => setContacts(contacts.filter((_, i) => i !== index))}>Delete</button></div>
+                  <div><button onClick={() => setContacts(contacts.filter((_, i) => i !== index))} ><FaTrashAlt className='text-red-500 ml-2'/></button></div>
                 </div>
               ))}
             </div>
-            <div className='flex flex-wrap flex-row gap-2'>
+              <div><button onClick={handleAddContact} className='text-white bg-purple-700 rounded-lg p-2'>Add Contact</button></div>
+            <div className='flex flex-wrap flex-row gap-2 border border-purple-700 mt-2 mx-1'>
               {avatars && avatars.map((avatar) => (
                 <div key={avatar.id}>
                   <input
@@ -210,8 +214,8 @@ const EditProfile = () => {
                 </div>
               ))}
             </div>
-            <div><button onClick={handleAddContact}>Add Contact</button></div>
-            <button type="submit">Submit</button>
+            <button type='submit' className='mt-5 w-[200px] bg-purple-800 text-white rounded-lg'>Enregistrer</button>
+
           </form>
         </div>
   )

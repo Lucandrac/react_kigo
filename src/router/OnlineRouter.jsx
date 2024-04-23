@@ -23,7 +23,7 @@ const OnlineRouter = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Screen1 /> //TODO: Dashboard
+                element: <Screen1 /> 
             },
             {
                 path: "/addpost",

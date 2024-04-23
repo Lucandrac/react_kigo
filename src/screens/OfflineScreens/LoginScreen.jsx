@@ -55,14 +55,15 @@ const LoginScreen = () => {
 
   return (
     <div className='flex justify-center items-center flex-col'>
-        <img src={`${apiRoot}/images/logo.jpg`} alt="logo kigo" />
+      <img className="absolute top-0 z-[-1]" src={`background.svg`} alt='background'/>
+        <img src={`${apiRoot}/images/logo.png`} alt="logo kigo" className='pt-12'/>
         <form onSubmit={handleSubmit} className='w-1/3 flex justify-center items-center flex-col'>
-            <CustomInput label={'Email'} type={'email'} state={email} callable={(event) => setEmail(event.target.value)} />
-            <CustomInput label={'Password'} type={'password'} state={password} callable={(event) => setPassword(event.target.value)} />
-            <Link to='/register' className='text-white hover:text-green_06'>Vous n'avez pas de compte ?</Link>
+            <CustomInput label={'Email'} type={'email'} state={email} callable={(event) => setEmail(event.target.value)}/>
+            <CustomInput label={'Mot de passe'} type={'password'} state={password} callable={(event) => setPassword(event.target.value)} />
+            <Link to='/register' className='text-gray-400 hover:text-gray-300 hover:underline w-[300px]'>Mot de passe oublié ?</Link>
 						{
 							isLoading ? <ButtonLoader /> : 
-            <button type='submit'>Login</button>
+            <button type='submit' className='mt-12 w-[300px]'><img src={`gobutton.svg`} alt="bouton go" /></button>
 						}
         </form>
     </div>

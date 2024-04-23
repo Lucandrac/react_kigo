@@ -12,6 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { changeArray } from '../../tools/miscelaneousTools';
 import { fetchCategories } from '../../redux/category/categorySlice';
 import { selectCategoryData } from '../../redux/category/categorySelector';
+import { Label } from 'flowbite-react';
 
 const AddProject = () => {
 
@@ -27,6 +28,8 @@ const AddProject = () => {
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const [cat, setCat] = useState('');
+    const [image, setImage] = useState(null);
+
 
     const navigate = useNavigate();
 
@@ -46,6 +49,13 @@ const AddProject = () => {
                 creator: `/api/users/${params.userId}`,
                 genre: '/api/genres/1',
             });
+
+            const formData = new FormData();
+            formData.append('file', image);
+            formData.append('post', `/api/posts/${response.data.id}`);
+            formData.append('postId', response.data.id);
+
+            await axios.post(`${apiUrl}/medias`, formData);
 
             console.log('poste crée')
             //puis le projet qui va être linké au post
@@ -93,38 +103,42 @@ const AddProject = () => {
 
   return (
     loading ? <ButtonLoader /> :
-    <div className="bg-black text-white flex flex-col">
-        <h1>AddProject</h1>
+    <div className=" flex flex-col">
+        <h1 className="text-3xl text-purple-900 font-bold m-3">Ajouter un Projet</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center">
             <CustomInput label={'Titre'} type={'text'} state={title} callable={(event) => setTitle(event.target.value)}/>
-            <textarea cols="30" rows="10" value={text} onChange={(event) => setText(event.target.value)}></textarea> 
-            <h2>Filieres attendues</h2>
-            <div className="flex flex-wrap">
+            <textarea cols="30" rows="6" value={text} onChange={(event) => setText(event.target.value)} className='shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'></textarea> 
+            <h2 className="text-xl text-purple-700 m-2">Filieres attendues</h2>
+            <div className="flex flex-wrap justify-center">
                 {filieres && filieres.map((filiere) => (
-                    <div key={filiere.id}>
+                    <div key={filiere.id} className='m-1'>
                         <input type="checkbox" value={filiere.id} onChange={handleCheckboxChangeFils}/>
-                        <label htmlFor={filiere.id}>{filiere.label}</label>
+                        <label htmlFor={filiere.id} className='m-1 text-purple-700 text-sm'>{filiere.label}</label>
                     </div>
                 ))}
             </div>
-            <h2>Compétences attendues</h2>
-            <div className="flex flex-wrap">
+            <h2 className="text-xl text-purple-700 m-2">Compétences attendues</h2>
+            <div className="flex flex-wrap justify-center">
                 {skills && skills.map((skill) => (
-                    <div key={skill.id}>
+                    <div key={skill.id} className='m-1'>
                         <input type="checkbox" value={skill.id} onChange={handleCheckBoxChangeComp}/>
-                        <label htmlFor={skill.id}>{skill.label}</label>
+                        <label htmlFor={skill.id} className='m-1 text-purple-700 text-sm'>{skill.label}</label>
                     </div>
                 ))}
             </div>
-            <h2>Catégorie</h2>
-            <select value={cat} onChange={(event) => setCat(event.target.value)}>
+            <h2 className="text-xl text-purple-700 m-2">Catégorie</h2>
+            <select value={cat} onChange={(event) => setCat(event.target.value)} className='shadow appearance-none border bg-purple-400 rounded w-[300px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center text-lg'>
               {categories && categories.map((category) => (
-                <option key={category.id} value={category.id}>{category.label}</option>
+                <option key={category.id} value={category.id} >{category.label}</option>
               ))}
             </select>
 
+            <h2 className="text-xl text-purple-700 m-2">Ajouter une image</h2>
+                <input type="file"  id="file-upload" onChange={(event) => setImage(event.target.files[0])} 
+                className='shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline bg-purple-400'/>
+                
+                <button type='submit' className='mt-12 w-[300px]'><img src={`gobutton.svg`} alt="bouton go" /></button>
 
-            <button type="submit">Ajouter</button>
         </form>
     </div>
   )

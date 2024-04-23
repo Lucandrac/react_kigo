@@ -2,6 +2,11 @@ import React, { useEffect } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { checkUser } from '../../services/userServices';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { IoMdAddCircle, IoMdHome } from 'react-icons/io';
+import { AiFillProject } from 'react-icons/ai';
+import { MdOutlinePostAdd } from 'react-icons/md';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { BiLogOut } from 'react-icons/bi';
 
 const HomeOnline = () => {
 
@@ -27,28 +32,30 @@ const HomeOnline = () => {
 
   return (
     <>
-    <div className= 'bg-black text-white text-center'>
-      <div>
-        <Link to={'/'}>Kigo</Link>
+    <img className="absolute top-0 z-[-1]" src={`background.svg`} alt='background'/>
+    <div className= 'navbar_color text-white text-center fixed bottom-0 w-full flex justify-center'>
+      <div className='m-2'>
+        <Link to={'/'} ><IoMdHome className='w-9 h-9'/></Link>
       </div>
-      {user && <Link to={`/profil/${user.userId}`}>Profil</Link>}
+      {user && <Link className='m-2' to={`/profil/${user.userId}`}><FaRegUserCircle className='w-9 h-9' /></Link>}
       {/* Link ajouter un projet */}
-      <div>
-      <Link to={`/addproject`}>Ajouter un projet</Link>
+      <div className='m-2'>
+      <Link to={`/addproject`}><IoMdAddCircle className='w-10 h-10'/></Link>
       </div>
-      <div>
-        {/* TODO: */}
-        <Link to={`/addpost`}>Ajouter un post</Link> 
+      <div className='m-2'>
+        <Link to={`/addpost`}><MdOutlinePostAdd className='w-9 h-9'/></Link> 
       </div>
-      <div>
-        <Link to={`/projects`}>Liste des projets</Link>
+      <div className='m-2'>
+        <Link to={`/projects`}><AiFillProject className='w-9 h-9'/></Link>
       </div>
-      <div>
-        <button onClick={() => {signOut(); navigate('/')}}>Se deconnecter</button>
+      <div className='m-2'>
+        <button onClick={() => {signOut(); navigate('/')}}><BiLogOut className='w-9 h-9'/></button>
       </div>
     </div>
         <Outlet />
+        <div className="h-[75px]"></div>
     </>
+
   )
 }
 
