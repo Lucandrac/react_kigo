@@ -51,7 +51,7 @@ const AddPost = () => {
 
     return (
         <div>
-            <h2 className="text-3xl text-purple-900 font-bold m-3 ">Ajouter un post</h2>
+            <h2 className="text-3xl text-purple-900 font-bold m-3 lg:text-center">Ajouter un post</h2>
 
             <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center">
                 <CustomInput label={'Titre'} type={'text'} state={title} callable={(event) => setTitle(event.target.value)} />

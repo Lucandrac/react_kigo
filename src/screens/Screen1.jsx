@@ -80,48 +80,48 @@ const Screen1 = () => {
     loading ? <ButtonLoader /> :
     <>
       <h2 className='text-4xl font-bold text-purple-800'><AiFillDashboard  className='w-5 h-5'/></h2>
-      <h3 className='mt-3 text-purple-800 text-center'>Projects en cours : </h3>
-      <h4 className='mt-3 text-purple-800 text-center'>Crées : </h4>
+      <h3 className='mt-3 text-purple-800 text-center lg:text-3xl'>Projects en cours : </h3>
+      <h4 className='mt-3 text-purple-800 text-center lg:text-2xl'>Crées : </h4>
       {posts && posts.length > 0 && posts.map((post) => (
         <div key={post.id} className='mb-3'>
           <div className="flex">
             {post.creator.avatar &&
-            <img src={`${apiRoot}/images/avatars/${post.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8'/>
+            <img src={`${apiRoot}/images/avatars/${post.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8 lg:w-16 lg:h-16'/>
             }
-            <div className="flex flex-col">
+            <div className="flex flex-col lg:text-lg">
               <Link to={`/profil/${post.creator.id}`}>
                 <p className="font-bold text-purple-700 underline">{post.creator.firstName}</p>
               </Link>
-              <p className='text-sm'>{post.creator.profil.filiere.label}</p>
+              <p className='text-sm lg:text-lg'>{post.creator.profil.filiere.label}</p>
             </div>
           </div>
           { post.media && post.media.length > 0 &&
-          <div className="flex justify-center"><img src={`${apiRoot}/upload/${post.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4'/></div>
+          <div className="flex justify-center"><img src={`${apiRoot}/upload/${post.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4 lg:w-1/3'/></div>
           }
           {post.project && 
-          <Link to={`/project/${post.project.id}`}><p className='ml-4 text-purple-900 font-bold'>{post.titre}</p></Link>
+          <Link to={`/project/${post.project.id}`}><p className='ml-4 text-purple-900 font-bold lg:text-center'>{post.titre}</p></Link>
           }
         </div>
       ))}
-      <h4 className='mt-3 text-purple-800 text-center'>Participant : </h4>
+      <h4 className='mt-3 text-purple-800 text-center lg:text-2xl'>Participant : </h4>
       {allParticipatingProjects && allParticipatingProjects.map((project) => (
         <div key={project.id} className='mb-3'>
         <div className="flex">
-          <img src={`${apiRoot}/images/avatars/${project.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8'/>
+          <img src={`${apiRoot}/images/avatars/${project.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8 lg:w-16 lg:h-16'/>
           <div className="flex flex-col">
             <Link to={`/profil/${project.creator.id}`}>
-              <p className="font-bold text-purple-700 underline">{project.creator.firstName}</p>
+              <p className="font-bold text-purple-700 underline lg:text-lg">{project.creator.firstName}</p>
             </Link>
-            <p className='text-sm'>{project.creator.profil.filiere.label}</p>
+            <p className='text-sm lg:text-lg'>{project.creator.profil.filiere.label}</p>
           </div>
         </div>
         { project.media && project.media.length > 0 &&
-        <div className="flex justify-center"><img src={`${apiRoot}/upload/${project.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4'/></div>
+        <div className="flex justify-center"><img src={`${apiRoot}/upload/${project.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4 lg:w-1/3'/></div>
         }
-        <Link to={`/project/${project.project.id}`}><p className='ml-4 text-purple-900 font-bold'>{project.titre}</p></Link>
+        <Link to={`/project/${project.project.id}`}><p className='ml-4 text-purple-900 font-bold lg:text-center'>{project.titre}</p></Link>
       </div>
       ))}
-      <h3 className='mt-3 text-purple-800 text-center' >Demandes : </h3>
+      <h3 className='mt-3 text-purple-800 text-center lg:text-2xl' >Demandes : </h3>
       {invites && invites.map((invite) => (
         <div key={invite.id} className='bg-purple-300 text-black flex rounded-lg px-3 mx-3'>
           <div>

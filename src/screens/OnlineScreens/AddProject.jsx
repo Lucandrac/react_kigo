@@ -104,7 +104,7 @@ const AddProject = () => {
   return (
     loading ? <ButtonLoader /> :
     <div className=" flex flex-col">
-        <h1 className="text-3xl text-purple-900 font-bold m-3">Ajouter un Projet</h1>
+        <h1 className="text-3xl text-purple-900 font-bold m-3 lg:text-center">Ajouter un Projet</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center">
             <CustomInput label={'Titre'} type={'text'} state={title} callable={(event) => setTitle(event.target.value)}/>
             <textarea cols="30" rows="6" value={text} onChange={(event) => setText(event.target.value)} className='shadow appearance-none border rounded w-[300px] py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline'></textarea> 

@@ -123,10 +123,10 @@ const ProjectDetail = () => {
     return (
         isLoading ? <ButtonLoader /> :
         loading ? <ButtonLoader /> :
-            <div>
-                <h1 className='text-3xl font-bold text-purple-900 m-3'>{projectPost.post ? projectPost.post.titre : 'nothing'}</h1>
+            <div className='lg:flex lg:flex-col lg:justify-center lg:items-center'>
+                <h1 className='text-3xl font-bold text-purple-900 m-3 lg:text-5xl lg:text-center'>{projectPost.post ? projectPost.post.titre : 'nothing'}</h1>
                 {projectPost.post && projectPost.post.media[0] && 
-                <div className="flex justify-center"><img src={`${apiRoot}/upload/${projectPost.post.media[0].url}`} alt="image" className='rounded-2xl w-3/4'/></div>
+                <div className="flex justify-center"><img src={`${apiRoot}/upload/${projectPost.post.media[0].url}`} alt="image" className='rounded-2xl w-3/4 lg:w-1/3'/></div>
                 }
                 <p className='text-center text-lg text-purple-600'>{projectPost.post ? projectPost.post.content : 'nothing'}</p>
                 {/* <p>{projectPost.post ? projectPost.post.dateCreation : 'nothing'}</p>

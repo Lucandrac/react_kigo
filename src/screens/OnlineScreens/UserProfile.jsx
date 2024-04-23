@@ -52,64 +52,64 @@ const UserProfile = () => {
           {profil.userId.id === JSON.parse(localStorage.getItem('userInfos')).userId && (
             <Link to={`/editprofil/${profil.userId.id}`}><FaEdit className='text-3xl text-purple-800 absolute top-0' /></Link>
           )}
-          <p className='m-5 text-sm text-black'>{profil.biography ? profil?.biography : 'biographie non renseignée'}</p>
-          <h2 className='mt-3 text-purple-800 text-center'>Compétences : </h2>
-          <div className="flex">
+          <p className='m-5 text-sm text-black lg:text-center lg:text-lg'>{profil.biography ? profil?.biography : 'biographie non renseignée'}</p>
+          <h2 className='mt-3 text-purple-800 text-center lg:text-2xl'>Compétences : </h2>
+          <div className="flex lg:justify-center">
             {profil.skills && profil.skills.map((skill) => (
               <div key={skill.id} className='m-3'>
-                <p className='text-sm text-purple-800'>{skill.label}</p>
+                <p className='text-sm text-purple-800 lg:text-lg'>{skill.label}</p>
               </div>
             ))}
           </div>
-          <h2 className='mt-3 text-purple-800 text-center'>Projets crées : </h2>
+          <h2 className='mt-3 text-purple-800 text-center lg:text-2xl'>Projets crées : </h2>
           {posts && posts.map((post) => (
              <div key={post.id} className='mb-3'>
              <div className="flex">
                {post.creator.avatar &&
-               <img src={`${apiRoot}/images/avatars/${post.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8'/>
+               <img src={`${apiRoot}/images/avatars/${post.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8 lg:w-12 lg:h-12'/>
                }
-               <div className="flex flex-col">
+               <div className="flex flex-col lg:text-lg">
                  <Link to={`/profil/${post.creator.id}`}>
                    <p className="font-bold text-purple-700 underline">{post.creator.firstName}</p>
                  </Link>
-                 <p className='text-sm'>{post.creator.profil.filiere.label}</p>
+                 <p className='text-sm lg:text-lg'>{post.creator.profil.filiere.label}</p>
                </div>
              </div>
              { post.media && post.media.length > 0 &&
-             <div className="flex justify-center"><img src={`${apiRoot}/upload/${post.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4'/></div>
+             <div className="flex justify-center"><img src={`${apiRoot}/upload/${post.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4 lg:w-1/3'/></div>
              }
              {post.project && 
              <Link to={`/project/${post.project.id}`}><p className='ml-4 text-purple-900 font-bold'>{post.titre}</p></Link>
              }
            </div>
           ))}
-          <h2 className='mt-3 text-purple-800 text-center'>Projets participés</h2>
+          <h2 className='mt-3 text-purple-800 text-center lg:text-2xl'>Projets participés</h2>
           {allParticipatingProjects && allParticipatingProjects.map((project) => (
         <div key={project.id} className='mb-3'>
         <div className="flex">
-          <img src={`${apiRoot}/images/avatars/${project.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8'/>
+          <img src={`${apiRoot}/images/avatars/${project.creator.avatar.imagePath}`} alt="profil" className='w-8 h-8 lg:w-12 lg:h-12'/>
           <div className="flex flex-col">
             <Link to={`/profil/${project.creator.id}`}>
-              <p className="font-bold text-purple-700 underline">{project.creator.firstName}</p>
+              <p className="font-bold text-purple-700 underline lg:text-lg">{project.creator.firstName}</p>
             </Link>
-            <p className='text-sm'>{project.creator.profil.filiere.label}</p>
+            <p className='text-sm lg:text-lg'>{project.creator.profil.filiere.label}</p>
           </div>
         </div>
         { project.media && project.media.length > 0 &&
-        <div className="flex justify-center"><img src={`${apiRoot}/upload/${project.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4'/></div>
+        <div className="flex justify-center"><img src={`${apiRoot}/upload/${project.media[0].url}`} alt="image projet" className='rounded-2xl w-3/4 lg:w-1/3'/></div>
         }
         <Link to={`/project/${project.project.id}`}><p className='ml-4 text-purple-900 font-bold'>{project.titre}</p></Link>
       </div>
       ))}
-          <h2 className='mt-3 text-purple-800 text-center'>Posts</h2>
+          <h2 className='mt-3 text-purple-800 text-center lg:text-2xl'>Posts</h2>
           {normalPosts && normalPosts.map((post) => (
             <div key={post.id} className='mb-6 bg-purple-300 mx-3 rounded-2xl py-3 pb-6'>
               <div className="flex justify-center">
                 {post.media && post.media.map((media) => (
-                  <img src={`${apiRoot}/upload/${media.url}`} alt={media.label} className='w-3/4 rounded-2xl'/>
+                  <img src={`${apiRoot}/upload/${media.url}`} alt={media.label} className='w-3/4 rounded-2xl lg:w-1/3'/>
                 ))}
               </div>
-              <h3 className='ml-4 text-purple-900 font-bold'>{post.titre}</h3>
+              <h3 className='ml-4 text-purple-900 font-bold text-lg'>{post.titre}</h3>
               <p className='mx-6 text-purple-900 text-sm'>{post.content}</p>
               <p className='float-right text-gray-500 text-xs'>{convertDate(post.dateCreation)}</p>
             </div>
