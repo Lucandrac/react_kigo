@@ -22,7 +22,7 @@ const avatarSlice = createSlice({
 })
 
 export const { setAvatars, setLoading } = avatarSlice.actions;
-
+//récupère tout les avatars
 export const fetchAvatars = () => async (dispatch) => {
     try {
         dispatch(setLoading(true));

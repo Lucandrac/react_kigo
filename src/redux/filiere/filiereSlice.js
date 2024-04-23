@@ -23,6 +23,7 @@ const filiereSlice = createSlice({
 
 export const { setFilieres, setLoading } = filiereSlice.actions;
 
+//toutes les filieres
 export const fetchFilieres = () => async (dispatch) => {
     try {
         dispatch(setLoading(true));

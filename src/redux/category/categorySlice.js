@@ -23,6 +23,7 @@ const categorySlice = createSlice({
 
 export const { setCategories, setLoading } = categorySlice.actions;
 
+//toutes les categories
 export const fetchCategories = () => async (dispatch) => {
     try {
         dispatch(setLoading(true));

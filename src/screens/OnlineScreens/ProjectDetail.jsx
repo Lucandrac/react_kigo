@@ -12,22 +12,61 @@ const ProjectDetail = () => {
 
     const params = useParams();
     const dispatch = useDispatch();
-    const { projectPost, loading } = useSelector(selectPostData);
-    const [isLoading, setIsLoading] = useState(false);
     const user = JSON.parse(localStorage.getItem('userInfos'));
+    const { projectPost, loading } = useSelector(selectPostData);
+
+    //on initialise les states
+    const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
+    
+    //on récupère le bon projet en fonction des params
     useEffect(() => {
         dispatch(fetchProjectPost(params.id));
+    }, [params])
+
+    const [isSent, setIsSent] = useState([]);
+
+    useEffect(() => {
+        setIsSent(JSON.parse(localStorage.getItem('isSent')) || []);
     }, [])
 
+    //envoyer une invitation
+    const handleClick = async (e, id) => {
+        e.preventDefault();
+     
+        setIsLoading(true);
+        //on créer une invitation
+        try {
+             axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
+            //on envoie une demande de rejoindre ce projet avec l'utilisateur connecté
+        await axios.post(`${apiUrl}/invites`, {
+            userId: `/api/users/${user.userId}`,
+            project: `/api/projects/${id}`,
+            isActive: true,
+            dateCreated: new Date(),
+        });
+        setIsLoading(false);
+        //on enregistre l'id dans le localStorage pour que l'utilisateur ne spam pas d'invitations
+        setIsSent([...isSent, id]);
+        localStorage.setItem('isSent', JSON.stringify([...isSent, id]));
+
+        } catch (error) {
+            console.log("Erreur lors de l'envoi de l'invitation : " + error);
+            setIsLoading(false);
+
+        }
+    }
+
+    //accepter la demande de rejoindre le projet
     const handleAccept = async (id, projectId) => {
         setIsLoading(true);
         try {
           axios.defaults.headers.patch['Content-Type'] = 'application/merge-patch+json';
-    
+          //on désactive l'invitation
           await axios.patch(`${apiUrl}/invites/${id}`, {
             isActive: false,
           })
+          //on ajoute l'utilisateur à la liste de participant
           const project = allParticipatingProjects.find((project) => project.id === projectId);
           await axios.patch(`${apiUrl}/projects/${projectId}`, {
             participant: [...project.participant, `/api/users/${user.userId}`],
@@ -40,11 +79,12 @@ const ProjectDetail = () => {
           setIsLoading(false);
         }
       }
+      //refuser la demande
       const handleRefuse = async (id) => {
         setIsLoading(true);
         try {
           axios.defaults.headers.patch['Content-Type'] = 'application/merge-patch+json';
-    
+          //on désactive l'invitation et c'est tout
           await axios.patch(`${apiUrl}/invites/${id}`, {
             isActive: false,
           })
@@ -57,6 +97,7 @@ const ProjectDetail = () => {
         }
       }
 
+      //envoyer un message
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -76,6 +117,7 @@ const ProjectDetail = () => {
         
       }
 
+      //fermer le projet
       const handleClose = async () => {
         setIsLoading(true);
         try {
@@ -90,6 +132,8 @@ const ProjectDetail = () => {
           setIsLoading(false);
         }
       }
+
+      //ouvrir le projet
       const handleOpen = async () => {
         setIsLoading(true);
         try {
@@ -105,6 +149,7 @@ const ProjectDetail = () => {
         }
       }
 
+      //le projet est fini
       const handleFinish = async () => {
         setIsLoading(true);
         try {
@@ -124,14 +169,26 @@ const ProjectDetail = () => {
         isLoading ? <ButtonLoader /> :
         loading ? <ButtonLoader /> :
             <div className='lg:flex lg:flex-col lg:justify-center lg:items-center'>
-                <h1 className='text-3xl font-bold text-purple-900 m-3 lg:text-5xl lg:text-center'>{projectPost.post ? projectPost.post.titre : 'nothing'}</h1>
+        {!(projectPost.post.isOpen || projectPost.post.creator !== user.userId) ? <p>Impossible de rejoindre</p> :
+              isLoading ? <ButtonLoader />
+                : (isSent.includes(projectPost.id)
+                  ? <button disabled className='text-purple-800 text-sm ml-3 float-right'>Invitation envoyé</button>
+                  : <button onClick={(e) => handleClick(e, projectPost.id)} className='text-purple-800 text-sm m-3 bg-purple-300 rounded px-2 float-right'>Participer</button>)
+                  }
+                <h1 className='text-3xl font-bold text-purple-900 m-3 lg:text-5xl lg:text-center'>
+                  {projectPost.post ? projectPost.post.titre : 'nothing'}
+                </h1>
                 {projectPost.post && projectPost.post.media[0] && 
                 <div className="flex justify-center"><img src={`${apiRoot}/upload/${projectPost.post.media[0].url}`} alt="image" className='rounded-2xl w-3/4 lg:w-1/3'/></div>
                 }
                 <p className='text-center text-lg text-purple-600'>{projectPost.post ? projectPost.post.content : 'nothing'}</p>
                 {/* <p>{projectPost.post ? projectPost.post.dateCreation : 'nothing'}</p>
                 <p>{projectPost.post ? projectPost.post.dateModified : 'nothing'}</p> */}
-                <p className='text-lg text-purple-600 ml-3'>Créateur : <Link to={projectPost.post ? `/profil/${projectPost.post.creator.id}` : '/'} className='underline'>{projectPost.post ? projectPost.post.creator.firstName : 'Créateur inconnu'} {projectPost.post ? projectPost.post.creator.name : 'Créateur inconnu'}</Link></p>
+                <p className='text-lg text-purple-600 ml-3'>Créateur :
+                 <Link to={projectPost.post ? `/profil/${projectPost.post.creator.id}` : '/'} className='underline'>
+                  {projectPost.post ? projectPost.post.creator.firstName : 'Créateur inconnu'} 
+                  {projectPost.post ? projectPost.post.creator.name : 'Créateur inconnu'}</Link>
+                  </p>
                 {projectPost ? projectPost.isOpen ?
                     <p className='text-lg ml-3 text-green-700'>Ouvert</p> : <p className='text-lg ml-3 text-red-800'>Fermé</p> 
                     : 'nothing'
@@ -141,13 +198,13 @@ const ProjectDetail = () => {
                     : 'nothing'
                  }
                   <h2 className='text-lg text-purple-600 text-center'>Compétences souhaitées</h2>
-                <div className='flex'>
+                <div className='flex ml-2 flex-wrap'>
                     {projectPost && projectPost.skills && projectPost.skills.map((skill) => (
                         <p key={`skill_${skill.id}`} className='bg-purple-700 text-white rounded-lg px-2'>{skill.label}</p>
                     ))}
                 </div>
                 <h2 className='text-lg text-purple-600 text-center'>Filières souhaitées</h2>
-                <div className='flex'>
+                <div className='flex ml-2 flex-wrap'>
                     {projectPost && projectPost.filieres && projectPost.filieres.map((filiere) => (
                         <p key={`filliere_${filiere.id}`} className='bg-purple-700 text-white rounded-lg px-2'>{filiere.label}</p>
                     ))}

@@ -22,7 +22,7 @@ const skillSlice = createSlice({
 })
 
 export const { setSkills, setLoading } = skillSlice.actions;
-
+//toutes les compétences
 export const fetchSkills = () => async (dispatch) => {
     try {
         dispatch(setLoading(true));

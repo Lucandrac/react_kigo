@@ -18,24 +18,29 @@ import { FaTrashAlt } from 'react-icons/fa';
 
 
 const EditProfile = () => {
-  const [bio, setBio] = useState('');
-  const [filiere, setFiliere] = useState('');
   const dispatch = useDispatch();
+  //on recupère les données depuis le redux
   const { filieres, loading } = useSelector(selectFiliereData);
   const { typeContact } = useSelector(selectTypeContactData);
   const { skills } = useSelector(selectSkillData);
+  const { avatars } = useSelector(selectAvatarData);
+  
+  //on recupère l'utilisateur avec le localStorage
   const params = JSON.parse(localStorage.getItem('userInfos'));
+
   const navigate = useNavigate();
+  //on initialise les states
   const [isLoading, setIsLoading] = useState(true);
   const [profil, setProfil] = useState({});
   const [profilId, setProfilId] = useState('');
   const [comp, setComp] = useState([]);
   const [contacts, setContacts] = useState([]);
-  const { avatars } = useSelector(selectAvatarData);
   const [picture, setPicture] = useState('');
+  const [bio, setBio] = useState('');
+  const [filiere, setFiliere] = useState('');
+  
 
-
-
+  //on récupère toutes les données du profil et on les met dans les states
   const fetchProfil = async () => {
     try {
       setIsLoading(true);
@@ -62,6 +67,7 @@ const EditProfile = () => {
     fetchProfil();
   }, [])
 
+  //on met les contacts dans le state
   useEffect(() => {
     if (profil.contacts) {
       setContacts(profil.contacts.map((contact) => ({
@@ -71,18 +77,20 @@ const EditProfile = () => {
     }
   }, [profil.contacts])
 
+  //au submit du formulaire
   const handleSubmit = async (event) => {
     event.preventDefault();
     //change headers
     axios.defaults.headers.patch['Content-Type'] = 'application/merge-patch+json';
-
     const filiereApi = `/api/filieres/${filiere}`;
+    //on patch le profil
     await axios.patch(`${apiUrl}/profils/${profilId}`, {
       biography: bio,
       filiere: filiereApi,
       skills: changeArray(comp, 'skills'),
     });
 
+    //puis on patch son avatar (associé à user)
     await axios.patch (`${apiUrl}/users/${params.userId}`, {
       avatar: `/api/avatars/${picture}`
     });
@@ -99,6 +107,7 @@ const EditProfile = () => {
       //puis on les reposts
       axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
 
+      //on post les nouveaux contacts
       contacts.map(async (contact) => {
         await axios.post(`${apiUrl}/contacts`, {
           type: `/api/type_contacts/${contact.typeContact}`,
@@ -114,6 +123,7 @@ const EditProfile = () => {
     navigate(`/profil/${params.userId}`);
   }
 
+  // on update le state contact avec les nouvelles valeurs
   const handleChange = (index, field, value) => {
     const updatedContacts = [...contacts];
     updatedContacts[index][field] = value;
@@ -121,11 +131,13 @@ const EditProfile = () => {
     console.log(contacts);
   };
 
+  //on update le state picture(avatar) avec la nouvelle valeur
   const handleSwitchPicture = (event) => {
     setPicture(event.target.value);
     
   }
 
+  //on update le state comp selon les checkboxs cochées en ajoutant au tableau actuel ou supprimant
   const handleCheckBoxChangeComp = (event) => {
     const targetValue = event.target.value;
     if (event.target.checked && !comp.includes(targetValue)) {
@@ -135,6 +147,7 @@ const EditProfile = () => {
     }
   }
 
+  //crée un nouveau contact vierge
   const handleAddContact = (e) => {
     e.preventDefault();
     const newContact = {
@@ -196,7 +209,7 @@ const EditProfile = () => {
                 </div>
               ))}
             </div>
-              <div><button onClick={handleAddContact} className='text-white bg-purple-700 rounded-lg p-2'>Add Contact</button></div>
+              <div><button onClick={handleAddContact} className='text-white bg-purple-700 rounded-lg p-2'>Ajouter un Contact</button></div>
             <div className='flex flex-wrap flex-row gap-2 border border-purple-700 mt-2 mx-1'>
               {avatars && avatars.map((avatar) => (
                 <div key={avatar.id}>

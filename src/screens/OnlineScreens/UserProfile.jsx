@@ -19,6 +19,7 @@ const UserProfile = () => {
 
 
   const params = useParams();
+  //on recupère le profil de l'utilisateur avec son id passé en paramètre (pas forcément celui qui est connecté)
   const fetchProfil = async () => {
     try {
       setIsLoading(true);
@@ -30,6 +31,7 @@ const UserProfile = () => {
     }
   }
 
+  //on récupère les posts de l'utilisateur, les projets auquels il a participé et les projets crées
   useEffect(() => {
     fetchProfil();
     dispatch(fetchAllParticipatingProjects(params.userId));

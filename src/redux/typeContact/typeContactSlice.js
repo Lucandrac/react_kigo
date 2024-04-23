@@ -22,7 +22,7 @@ const typeContactlice = createSlice({
 })
 
 export const { setTypeContact, setLoading } = typeContactlice.actions;
-
+//toutes les types de contact
 export const fetchTypeContact = () => async (dispatch) => {
     try {
         dispatch(setLoading(true));

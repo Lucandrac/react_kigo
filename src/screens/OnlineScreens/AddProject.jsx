@@ -17,12 +17,15 @@ import { Label } from 'flowbite-react';
 const AddProject = () => {
 
     const dispatch = useDispatch();
+    //on récupère l'utilisateur avec le localStorage
     const params = JSON.parse(localStorage.getItem('userInfos'));
 
+    //on récupère les données depuis le redux
     const { filieres, loading } = useSelector(selectFiliereData);
     const { skills } = useSelector(selectSkillData);
     const { categories } = useSelector(selectCategoryData);
 
+    //on initialise les states
     const [fils, setFils] = useState([]);
     const [comp, setComp] = useState([]);
     const [title, setTitle] = useState('');
@@ -50,6 +53,7 @@ const AddProject = () => {
                 genre: '/api/genres/1',
             });
 
+            //on crée son média associé au bon format
             const formData = new FormData();
             formData.append('file', image);
             formData.append('post', `/api/posts/${response.data.id}`);
@@ -77,6 +81,7 @@ const AddProject = () => {
         
     }
 
+    //pour gérer les states array des filières sélectionnées
     const handleCheckboxChangeFils = (event) => {
         const targetValue = event.target.value;
         if (event.target.checked) {
@@ -86,6 +91,7 @@ const AddProject = () => {
         }
     };
 
+    //pour gérer les states array des compétences sélectionnées
     const handleCheckBoxChangeComp = (event) => {
         const targetValue = event.target.value;
         if (event.target.checked) {
@@ -94,7 +100,7 @@ const AddProject = () => {
           setComp((prevComp) => prevComp.filter((c) => c !== targetValue));
         }
     }
-
+    //on récupère les filières, les categories et les compétences depuis le redux
     useEffect(() => {
         dispatch(fetchCategories());
         dispatch(fetchSkills());

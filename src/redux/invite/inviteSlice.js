@@ -23,6 +23,7 @@ const inviteSlice = createSlice({
 
 export const { setInvites, setLoading } = inviteSlice.actions;
 
+//toutes les invitations d'un project
 export const fetchInvites = (projectId) => async (dispatch) => {
     try {
         dispatch(setLoading(true));

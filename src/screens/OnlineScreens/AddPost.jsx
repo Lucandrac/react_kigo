@@ -4,13 +4,15 @@ import { FileInput, Label } from 'flowbite-react';
 import axios from 'axios';
 import { apiUrl } from '../../constants/apiConstants';
 import { useNavigate } from 'react-router-dom';
+import ButtonLoader from '../../components/Loaders/ButtonLoader';
 
 const AddPost = () => {
 
+    //on récupère l'utilisateur depuis le localStorage
     const user = JSON.parse(localStorage.getItem('userInfos'));
 
     const navigate = useNavigate();
-
+    //on initialise des states pour les récupérer dans le submit
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const [image, setImage] = useState(null);
@@ -18,13 +20,9 @@ const AddPost = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        //TODO: Résoudre le bug de l'upload de l'image
-        // problème de format multipart/form-data accepter par l'api
-        // ApiPlatform\Metadata\ApiResource::__construct(): Argument #31 ($openapi) must be of type ApiPlatform\OpenApi\Model\Operation|bool|null, array given, called in /app/src/Entity/Media.php on line 13
-        // ensuite Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at http://api-kigo.lndo.site/api/posts. (Reason: CORS header ‘Access-Control-Allow-Origin’ missing). Status code: 500.
-        try {
+                try {
             setIsLoading(true);
+            //on se prépare à poster le nouveau post sur la bdd avec axios
             axios.defaults.headers.post['Content-Type'] = 'application/ld+json';
             const response = await axios.post(`${apiUrl}/posts`, {
                 titre: title,
@@ -34,7 +32,7 @@ const AddPost = () => {
                 creator: `/api/users/${user.userId}`,
                 genre: '/api/genres/2',
             });
-
+            //on ajoute l'image grace à l'object media, pour cela il faut passer par cette syntaxe afin de l'envoyer au bon format
             const formData = new FormData();
             formData.append('file', image);
             formData.append('post', `/api/posts/${response.data.id}`);
@@ -50,6 +48,7 @@ const AddPost = () => {
     }
 
     return (
+        isLoading ? <ButtonLoader /> :
         <div>
             <h2 className="text-3xl text-purple-900 font-bold m-3 lg:text-center">Ajouter un post</h2>
 
