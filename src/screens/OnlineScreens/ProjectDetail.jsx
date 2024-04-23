@@ -166,10 +166,12 @@ const ProjectDetail = () => {
       }
 
     return (
+        console.log(projectPost),
         isLoading ? <ButtonLoader /> :
         loading ? <ButtonLoader /> :
             <div className='lg:flex lg:flex-col lg:justify-center lg:items-center'>
-        {!(projectPost.post.isOpen || projectPost.post.creator !== user.userId) ? <p>Impossible de rejoindre</p> :
+              {/* envoyer une invitation, seulement possible si le projet est ouvert, et que l'utilisateur n'est pas le createur, et que l'invitation n'est pas été déjà envoyée */}
+        {!(projectPost.post.isOpen || projectPost.post.creator.id !== user.userId) ? <p></p> :
               isLoading ? <ButtonLoader />
                 : (isSent.includes(projectPost.id)
                   ? <button disabled className='text-purple-800 text-sm ml-3 float-right'>Invitation envoyé</button>
@@ -184,9 +186,9 @@ const ProjectDetail = () => {
                 <p className='text-center text-lg text-purple-600'>{projectPost.post ? projectPost.post.content : 'nothing'}</p>
                 {/* <p>{projectPost.post ? projectPost.post.dateCreation : 'nothing'}</p>
                 <p>{projectPost.post ? projectPost.post.dateModified : 'nothing'}</p> */}
-                <p className='text-lg text-purple-600 ml-3'>Créateur :
+                <p className='text-lg text-purple-600 ml-3'>Créateur : 
                  <Link to={projectPost.post ? `/profil/${projectPost.post.creator.id}` : '/'} className='underline'>
-                  {projectPost.post ? projectPost.post.creator.firstName : 'Créateur inconnu'} 
+                   {projectPost.post ? projectPost.post.creator.firstName : 'Créateur inconnu'} 
                   {projectPost.post ? projectPost.post.creator.name : 'Créateur inconnu'}</Link>
                   </p>
                 {projectPost ? projectPost.isOpen ?
