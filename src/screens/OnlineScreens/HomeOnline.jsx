@@ -32,7 +32,7 @@ const HomeOnline = () => {
 
   return (
     <>
-    <img className="absolute top-0 z-[-1] lg:w-full" src={`background.svg`} alt='background'/>
+    <img className="absolute top-0 z-[-1] w-full" src={`background.svg`} alt='background'/>
     <div className= 'navbar_color text-white text-center fixed bottom-0 w-full flex justify-center'>
       <div className='m-2'>
         <Link to={'/'} ><IoMdHome className='w-9 h-9'/></Link>
