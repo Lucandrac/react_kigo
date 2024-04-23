@@ -1,9 +1,9 @@
 import React from 'react'
-import { Audio } from 'react-loader-spinner'
+import { Audio, InfinitySpin } from 'react-loader-spinner'
 
 const ButtonLoader = () => {
   return (
-    <Audio
+    <InfinitySpin
     height="60"
     width="60"
     color="rgba(30, 215, 96, 1)"
