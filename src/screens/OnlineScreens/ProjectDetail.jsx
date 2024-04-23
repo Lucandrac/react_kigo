@@ -166,12 +166,11 @@ const ProjectDetail = () => {
       }
 
     return (
-        console.log(projectPost),
         isLoading ? <ButtonLoader /> :
         loading ? <ButtonLoader /> :
             <div className='lg:flex lg:flex-col lg:justify-center lg:items-center'>
               {/* envoyer une invitation, seulement possible si le projet est ouvert, et que l'utilisateur n'est pas le createur, et que l'invitation n'est pas été déjà envoyée */}
-        {!(projectPost.post.isOpen || projectPost.post.creator.id !== user.userId) ? <p></p> :
+        {projectPost.post && !(projectPost.post.isOpen || projectPost.post.creator.id !== user.userId) ? <p></p> :
               isLoading ? <ButtonLoader />
                 : (isSent.includes(projectPost.id)
                   ? <button disabled className='text-purple-800 text-sm ml-3 float-right'>Invitation envoyé</button>
