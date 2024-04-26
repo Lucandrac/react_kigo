@@ -49,7 +49,7 @@ const HomeOnline = () => {
           <Link to={`/projects`}><AiFillProject className='w-9 h-9' /></Link>
         </div>
         <div className='m-2'>
-          <button onClick={() => { signOut(); navigate('/') }}><BiLogOut className='w-9 h-9' /></button>
+          <button onClick={() => { if(confirm('Deconnexion, voulez-vous vous déconnecter ?')){ signOut(); navigate('/')} }}><BiLogOut className='w-9 h-9' /></button>
         </div>
       </div>
       <Outlet />

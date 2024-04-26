@@ -80,7 +80,7 @@ const EditProfile = () => {
   //au submit du formulaire
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //change headers
+    //change headers pour accepter le patch
     axios.defaults.headers.patch['Content-Type'] = 'application/merge-patch+json';
     const filiereApi = `/api/filieres/${filiere}`;
     //on patch le profil
